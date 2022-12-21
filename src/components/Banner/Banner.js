@@ -37,7 +37,7 @@ const Banner = () => {
                     }}>Ultimate Crypto Screener
                 </Typography>
                 <Typography
-                    variant='subtitle2'
+                    variant='subtitle1'
                     style={{
                         color: "darkgrey",
                         fontFamily: 'Montserrat',
