@@ -24,10 +24,9 @@ const TokenTable = () => {
         setLoading(false);
     };
 
-    console.log(tokens);
-
     useEffect(() => {
         fetchTokens();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [currency]);
 
       const darkTheme = createTheme({
