@@ -1,9 +1,10 @@
 import React from "react";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import { CryptoState } from "../CryptoContext";
 import { Avatar, Button } from "@material-ui/core";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 const useStyles = makeStyles({
   container: {
@@ -66,8 +67,7 @@ export default function TemporaryDrawer() {
   const [state, setState] = React.useState({
     right: false,
   });
-
-  const { user } = CryptoState();
+  const { user, setAlert } = CryptoState();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -80,20 +80,16 @@ export default function TemporaryDrawer() {
     setState({ ...state, [anchor]: open });
   };
 
-  const logOut = () => {};
+  const logOut = () => {
+    signOut(auth);
+    setAlert({
+      open: true,
+      type: "success",
+      message: "Logout Successfull !",
+    });
 
-  const list = (anchor) => (
-    <div
-      className={clsx(classes.list, {
-        [classes.fullList]: anchor === "top" || anchor === "bottom",
-      })}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      hello
-    </div>
-  );
+    toggleDrawer();
+  };
 
   return (
     <div>
