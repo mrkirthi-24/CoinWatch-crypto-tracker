@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { CryptoState } from '../CryptoContext';
-import { HistoricalChart } from '../config/api';
-import axios from 'axios';
-import { CircularProgress, createTheme, makeStyles, ThemeProvider } from '@material-ui/core';
-import { Line } from 'react-chartjs-2';
-import { chartDays } from '../config/data';
-import SelectButton from './SelectButton';
+import React, { useEffect, useState } from "react";
+import { CryptoState } from "../CryptoContext";
+import { HistoricalChart } from "../config/api";
+import axios from "axios";
+import {
+  CircularProgress,
+  createTheme,
+  makeStyles,
+  ThemeProvider,
+} from "@material-ui/core";
+import { Line } from "react-chartjs-2";
+import { chartDays } from "../config/data";
+import SelectButton from "./SelectButton";
 
-const TokenChart = ({token}) => {
+const TokenChart = ({ token }) => {
   const [historicData, setHistoricData] = useState();
   const [days, setDays] = useState(1);
 
@@ -39,8 +44,6 @@ const TokenChart = ({token}) => {
     setHistoricData(data.prices);
   };
 
-  console.log(token);
-
   useEffect(() => {
     fetchHistoricData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,56 +61,63 @@ const TokenChart = ({token}) => {
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
-          {!historicData ? (
-            <CircularProgress
-              style={{color: 'gold'}}
-              size={250}
-              thickness={1} />
-          ):(
-            <>
-              <Line 
-                data={{
-                  labels: historicData.map((token) => {
-                    let date = new Date(token[0]);
-                    let time = date.getHours() > 12
-                        ? `${date.getHours()-12}:${date.getMinutes()} PM` 
-                        : `${date.getHours()}:${date.getMinutes()} AM`;
-                      return days===1 ? time : date.toLocaleDateString(); //if days 1 then display only time otherwise show local date
-                  }),
-                  datasets: [{
+        {!historicData ? (
+          <CircularProgress
+            style={{ color: "gold" }}
+            size={250}
+            thickness={1}
+          />
+        ) : (
+          <>
+            <Line
+              data={{
+                labels: historicData.map((token) => {
+                  let date = new Date(token[0]);
+                  let time =
+                    date.getHours() > 12
+                      ? `${date.getHours() - 12}:${date.getMinutes()} PM`
+                      : `${date.getHours()}:${date.getMinutes()} AM`;
+                  return days === 1 ? time : date.toLocaleDateString(); //if days 1 then display only time otherwise show local date
+                }),
+                datasets: [
+                  {
                     data: historicData.map((token) => token[1]),
                     label: `Price ( Past ${days} Days ) in ${currency}`,
                     borderColor: "#EEBC1D",
-                  }],
-                }}
-                options={{
+                  },
+                ],
+              }}
+              options={{
                 elements: {
                   point: {
                     radius: 1,
                   },
                 },
               }}
-              />
-              <div
+            />
+            <div
               style={{
                 display: "flex",
                 marginTop: 20,
                 justifyContent: "space-around",
                 width: "100%",
-              }}>
+              }}
+            >
               {chartDays.map((day) => (
                 <SelectButton
                   key={day.value}
                   onClick={() => setDays(day.value)}
                   selected={day.value === days}
-                >{day.label}</SelectButton>
+                >
+                  {day.label}
+                </SelectButton>
               ))}
             </div>
-            </>
-          )}
+          </>
+        )}
       </div>
     </ThemeProvider>
   );
-}
+};
 
-export default TokenChart
+export default TokenChart;
