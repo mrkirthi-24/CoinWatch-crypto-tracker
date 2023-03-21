@@ -97,7 +97,7 @@ const TokenTable = () => {
                           textTransform: "uppercase",
                         }}
                         key={head}
-                        align={head === "Token" ? "" : "right"}
+                        align={head === "Token" ? "left" : "right"}
                       >
                         {head}
                       </TableCell>
@@ -183,7 +183,7 @@ const TokenTable = () => {
             justifyContent: "center",
           }}
           classes={{ ul: classes.pagination }}
-          count={(handleSearch()?.length / 10).toFixed(0)}
+          count={Math.round(handleSearch()?.length / 10)}
           onChange={(_, value) => {
             setPage(value);
             window.scroll(0, 450);

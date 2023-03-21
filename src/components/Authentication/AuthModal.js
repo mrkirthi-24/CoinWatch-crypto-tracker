@@ -48,7 +48,7 @@ export default function AuthModal() {
     setOpen(false);
   };
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (newValue) => {
     setValue(newValue);
   };
 
