@@ -4,7 +4,10 @@ import Drawer from "@material-ui/core/Drawer";
 import { CryptoState } from "../CryptoContext";
 import { Avatar, Button } from "@material-ui/core";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { numberWithCommas } from "./Banner/Carousel";
+import { AiFillDelete } from "react-icons/ai";
+import { doc, setDoc } from "firebase/firestore";
 
 const useStyles = makeStyles({
   container: {
@@ -49,7 +52,7 @@ const useStyles = makeStyles({
     gap: 12,
     overflowY: "scroll",
   },
-  coin: {
+  token: {
     padding: 10,
     borderRadius: 5,
     color: "black",
@@ -67,7 +70,7 @@ export default function TemporaryDrawer() {
   const [state, setState] = React.useState({
     right: false,
   });
-  const { user, setAlert } = CryptoState();
+  const { user, setAlert, watchlist, tokens, symbol } = CryptoState();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -89,6 +92,29 @@ export default function TemporaryDrawer() {
     });
 
     toggleDrawer();
+  };
+
+  const removeFromWatchlist = async (token) => {
+    const coinRef = doc(db, "watchlist", user.uid);
+    try {
+      await setDoc(
+        coinRef,
+        { tokens: watchlist.filter((wish) => wish !== token?.id) },
+        { merge: true }
+      );
+
+      setAlert({
+        open: true,
+        message: `${token.name} Removed from the Watchlist!`,
+        type: "success",
+      });
+    } catch (error) {
+      setAlert({
+        open: true,
+        message: error.message,
+        type: "error",
+      });
+    }
   };
 
   return (
@@ -133,6 +159,24 @@ export default function TemporaryDrawer() {
                   <span style={{ fontSize: 15, textShadow: "0 0 5px black" }}>
                     Watchlist
                   </span>
+                  {tokens.map((token) => {
+                    if (watchlist.includes(token.id))
+                      return (
+                        <div className={classes.token} key={token.id}>
+                          <span>{token.name}</span>
+                          <span style={{ display: "flex", gap: 8 }}>
+                            {symbol}
+                            {numberWithCommas(token.current_price.toFixed(2))}
+                            <AiFillDelete
+                              style={{ cursor: "pointer" }}
+                              fontSize="16"
+                              onClick={() => removeFromWatchlist(token)}
+                            />
+                          </span>
+                        </div>
+                      );
+                    else return <></>;
+                  })}
                 </div>
               </div>
               <Button

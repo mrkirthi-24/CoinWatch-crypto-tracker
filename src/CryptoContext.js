@@ -22,16 +22,16 @@ const CryptoContext = ({ children }) => {
 
   useEffect(() => {
     if (user) {
-      const coinRef = doc(db, "watchlist", user.uid);
-
+      const coinRef = doc(db, "watchlist", user?.uid);
       var unsubscribe = onSnapshot(coinRef, (coin) => {
         if (coin.exists()) {
-          console.log(coin.data().coins);
-          setWatchlist(coin.data().coins);
+          console.log(coin.data().tokens);
+          setWatchlist(coin.data().tokens);
         } else {
-          console.log("No tokens in the Watchlist");
+          console.log("No Items in Watchlist");
         }
       });
+
       return () => {
         unsubscribe();
       };

@@ -25,73 +25,20 @@ const TokenPage = () => {
     setToken(data);
   };
 
-  //to call fetchToken api
-  useEffect(() => {
-    fetchToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const useStyles = makeStyles((theme) => ({
-    container: {
-      display: "flex",
-      [theme.breakpoints.down("md")]: {
-        //if its less than mediumScreen size
-        flexDirection: "column",
-        alignItems: "center",
-      },
-    },
-    sidebar: {
-      width: "30%",
-      [theme.breakpoints.down("md")]: {
-        //if its less than mediumScreen size
-        width: "100%",
-      },
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      marginTop: 25,
-      borderRight: "2px solid grey",
-    },
-    heading: {
-      fontWeight: "bold",
-      display: "flex",
-      alignItems: "center",
-    },
-    description: {
-      padding: "0px 15px 25px 25px",
-      textAlign: "justify",
-    },
-    marketData: {
-      alignSelf: "start",
-      padding: 25,
-      paddingTop: 10,
-      width: "100%",
-      [theme.breakpoints.down("md")]: {
-        display: "flex",
-        justifyContent: "space-around",
-      },
-      [theme.breakpoints.down("sm")]: {
-        flexDirection: "column",
-        alignItems: "center",
-      },
-      [theme.breakpoints.down("xs")]: {
-        alignItems: "start",
-      },
-    },
-  }));
-
-  const inWatchlist = watchlist?.includes(token?.id);
+  const inWatchlist = watchlist.includes(token?.id);
 
   const addToWatchlist = async () => {
     const coinRef = doc(db, "watchlist", user.uid);
-
     try {
-      await setDoc(coinRef, {
-        tokens: watchlist ? [...watchlist, token.id] : [token.id],
-      });
+      await setDoc(
+        coinRef,
+        { tokens: watchlist ? [...watchlist, token?.id] : [token?.id] },
+        { merge: true }
+      );
+
       setAlert({
         open: true,
-        message: `${token.name} added successfully`,
+        message: `${token.name} Added to the Watchlist!`,
         type: "success",
       });
     } catch (error) {
@@ -114,7 +61,7 @@ const TokenPage = () => {
 
       setAlert({
         open: true,
-        message: `${token.name} removed from the Watchlist !`,
+        message: `${token.name} Removed from the Watchlist!`,
         type: "success",
       });
     } catch (error) {
@@ -125,6 +72,59 @@ const TokenPage = () => {
       });
     }
   };
+
+  useEffect(() => {
+    fetchToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const useStyles = makeStyles((theme) => ({
+    container: {
+      display: "flex",
+      [theme.breakpoints.down("md")]: {
+        flexDirection: "column",
+        alignItems: "center",
+      },
+    },
+    sidebar: {
+      width: "30%",
+      [theme.breakpoints.down("md")]: {
+        width: "100%",
+      },
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      marginTop: 25,
+      borderRight: "2px solid grey",
+    },
+    heading: {
+      fontWeight: "bold",
+      marginBottom: 20,
+      fontFamily: "Montserrat",
+    },
+    description: {
+      width: "100%",
+      fontFamily: "Montserrat",
+      padding: 25,
+      paddingBottom: 15,
+      paddingTop: 0,
+      textAlign: "justify",
+    },
+    marketData: {
+      alignSelf: "start",
+      padding: 25,
+      paddingTop: 10,
+      width: "100%",
+      [theme.breakpoints.down("md")]: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      },
+      [theme.breakpoints.down("xs")]: {
+        alignItems: "start",
+      },
+    },
+  }));
 
   const classes = useStyles();
 
@@ -205,7 +205,7 @@ const TokenPage = () => {
               }}
               onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}
             >
-              {inWatchlist ? "Remove from WatchList" : "Add to WatchList"}
+              {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
             </Button>
           )}
         </div>
