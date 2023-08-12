@@ -1,8 +1,8 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import { CryptoState } from "../CryptoContext";
 import { Avatar, Button } from "@material-ui/core";
+import { CryptoState } from "../CryptoContext";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { numberWithCommas } from "./Banner/Carousel";
@@ -52,7 +52,7 @@ const useStyles = makeStyles({
     gap: 12,
     overflowY: "scroll",
   },
-  token: {
+  coin: {
     padding: 10,
     borderRadius: 5,
     color: "black",
@@ -65,13 +65,12 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TemporaryDrawer() {
+export default function UserSidebar() {
   const classes = useStyles();
   const [state, setState] = React.useState({
     right: false,
   });
   const { user, setAlert, watchlist, tokens, symbol } = CryptoState();
-
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -88,24 +87,24 @@ export default function TemporaryDrawer() {
     setAlert({
       open: true,
       type: "success",
-      message: "Logout Successfull !",
+      message: "Logout Successfull!",
     });
 
     toggleDrawer();
   };
 
-  const removeFromWatchlist = async (token) => {
+  const removeFromWatchlist = async (coin) => {
     const coinRef = doc(db, "watchlist", user.uid);
     try {
       await setDoc(
         coinRef,
-        { tokens: watchlist.filter((wish) => wish !== token?.id) },
+        { tokens: watchlist.filter((wish) => wish !== coin?.id) },
         { merge: true }
       );
 
       setAlert({
         open: true,
-        message: `${token.name} Removed from the Watchlist!`,
+        message: `${coin.name} Removed from the Watchlist !`,
         type: "success",
       });
     } catch (error) {
@@ -126,6 +125,7 @@ export default function TemporaryDrawer() {
             style={{
               height: 38,
               width: 38,
+              marginLeft: 15,
               cursor: "pointer",
               backgroundColor: "#EEBC1D",
             }}
@@ -159,23 +159,23 @@ export default function TemporaryDrawer() {
                   <span style={{ fontSize: 15, textShadow: "0 0 5px black" }}>
                     Watchlist
                   </span>
-                  {tokens.map((token) => {
-                    if (watchlist.includes(token.id))
+                  {tokens.map((coin) => {
+                    if (watchlist.includes(coin.id))
                       return (
-                        <div className={classes.token} key={token.id}>
-                          <span>{token.name}</span>
+                        <div key={coin.id} className={classes.coin}>
+                          <span>{coin.name}</span>
                           <span style={{ display: "flex", gap: 8 }}>
-                            {symbol}
-                            {numberWithCommas(token.current_price.toFixed(2))}
+                            {symbol}{" "}
+                            {numberWithCommas(coin.current_price.toFixed(2))}
                             <AiFillDelete
                               style={{ cursor: "pointer" }}
                               fontSize="16"
-                              onClick={() => removeFromWatchlist(token)}
+                              onClick={() => removeFromWatchlist(coin)}
                             />
                           </span>
                         </div>
                       );
-                    else return <></>;
+                    else return "";
                   })}
                 </div>
               </div>

@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   paper: {
-    backgroundColor: theme.palette.background.paper,
     width: 400,
+    backgroundColor: theme.palette.background.paper,
     color: "white",
     borderRadius: 10,
   },
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AuthModal() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState(0);
+
   const { setAlert } = CryptoState();
 
   const handleOpen = () => {
@@ -48,20 +48,24 @@ export default function AuthModal() {
     setOpen(false);
   };
 
-  const handleChange = (newValue) => {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const googleProvider = new GoogleAuthProvider();
 
+  //Google signIn option
   const signInWithGoogle = () => {
     signInWithPopup(auth, googleProvider)
-      .then((result) => {
+      .then((res) => {
         setAlert({
           open: true,
-          message: `Sign Up successfull. Welcome ${result.user.email}`,
+          message: `Sign Up Successful. Welcome ${res.user.email}`,
           type: "success",
         });
+
         handleClose();
       })
       .catch((error) => {
@@ -79,13 +83,14 @@ export default function AuthModal() {
       <Button
         variant="contained"
         style={{
-          width: 84,
+          width: 85,
           height: 40,
+          marginLeft: 15,
           backgroundColor: "#EEBC1D",
         }}
         onClick={handleOpen}
       >
-        LOGIN
+        Login
       </Button>
       <Modal
         aria-labelledby="transition-modal-title"
@@ -115,7 +120,7 @@ export default function AuthModal() {
                 style={{ borderRadius: 10 }}
               >
                 <Tab label="Login" />
-                <Tab label="SignUp" />
+                <Tab label="Sign Up" />
               </Tabs>
             </AppBar>
             {value === 0 && <Login handleClose={handleClose} />}
@@ -123,8 +128,8 @@ export default function AuthModal() {
             <Box className={classes.google}>
               <span>OR</span>
               <GoogleButton
-                onClick={signInWithGoogle}
                 style={{ width: "100%", outline: "none" }}
+                onClick={signInWithGoogle}
               />
             </Box>
           </div>

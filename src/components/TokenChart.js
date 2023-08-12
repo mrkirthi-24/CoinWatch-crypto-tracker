@@ -47,7 +47,7 @@ const TokenChart = ({ token }) => {
   useEffect(() => {
     fetchHistoricData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currency, days]);
+  }, [days, currency]);
 
   const darkTheme = createTheme({
     palette: {
@@ -71,17 +71,18 @@ const TokenChart = ({ token }) => {
           <>
             <Line
               data={{
-                labels: historicData.map((token) => {
-                  let date = new Date(token[0]);
+                labels: historicData.map((coin) => {
+                  let date = new Date(coin[0]);
                   let time =
                     date.getHours() > 12
                       ? `${date.getHours() - 12}:${date.getMinutes()} PM`
                       : `${date.getHours()}:${date.getMinutes()} AM`;
-                  return days === 1 ? time : date.toLocaleDateString(); //if days 1 then display only time otherwise show local date
+                  return days === 1 ? time : date.toLocaleDateString();
                 }),
+
                 datasets: [
                   {
-                    data: historicData.map((token) => token[1]),
+                    data: historicData.map((coin) => coin[1]),
                     label: `Price ( Past ${days} Days ) in ${currency}`,
                     borderColor: "#EEBC1D",
                   },

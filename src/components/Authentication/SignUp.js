@@ -27,7 +27,6 @@ const SignUp = ({ handleClose }) => {
         email,
         password
       );
-      console.log(result);
       setAlert({
         open: true,
         message: `Sign Up Successful. Welcome ${result.user.email}`,
@@ -56,7 +55,7 @@ const SignUp = ({ handleClose }) => {
         label="Enter email"
         type="email"
         onChange={(e) => setEmail(e.target.value)}
-        fullwidth
+        fullWidth
       />
       <TextField
         variant="outlined"
@@ -64,7 +63,7 @@ const SignUp = ({ handleClose }) => {
         label="Enter password"
         type="password"
         onChange={(e) => setPassword(e.target.value)}
-        fullwidth
+        fullWidth
       />
       <TextField
         variant="outlined"
@@ -72,7 +71,7 @@ const SignUp = ({ handleClose }) => {
         label="Confirm Password"
         type="password"
         onChange={(e) => setConfirmPassword(e.target.value)}
-        fullwidth
+        fullWidth
       />
       <Button
         variant="contained"

@@ -79,7 +79,7 @@ const TokenTable = () => {
           label="Search for Cryptocurrency.."
           variant="outlined"
           style={{ marginBottom: 20, width: "100%" }}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value.toLowerCase())}
         />
         <TableContainer>
           {loading ? (
@@ -89,14 +89,14 @@ const TokenTable = () => {
               <TableHead style={{ backgroundColor: "#EEBC1D" }}>
                 <TableRow>
                   {["Token", "Price", "24h Change", "Market Cap"].map(
-                    (head) => (
+                    (head, index) => (
                       <TableCell
                         style={{
                           color: "black",
                           fontWeight: "700",
                           textTransform: "uppercase",
                         }}
-                        key={head}
+                        key={index}
                         align={head === "Token" ? "left" : "right"}
                       >
                         {head}
@@ -115,7 +115,7 @@ const TokenTable = () => {
                       <TableRow
                         onClick={() => history.push(`tokens/${row.id}`)}
                         className={classes.row}
-                        key={row.name}
+                        key={row.id}
                       >
                         <TableCell
                           component="th"

@@ -25,6 +25,11 @@ const TokenPage = () => {
     setToken(data);
   };
 
+  useEffect(() => {
+    fetchToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const inWatchlist = watchlist.includes(token?.id);
 
   const addToWatchlist = async () => {
@@ -72,11 +77,6 @@ const TokenPage = () => {
       });
     }
   };
-
-  useEffect(() => {
-    fetchToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const useStyles = makeStyles((theme) => ({
     container: {

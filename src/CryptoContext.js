@@ -44,11 +44,6 @@ const CryptoContext = ({ children }) => {
     });
   }, []);
 
-  useEffect(() => {
-    if (currency === "INR") setSymbol("₹");
-    else if (currency === "USD") setSymbol("$");
-  }, [currency]);
-
   const fetchTokens = async () => {
     setLoading(true);
     const { data } = await axios.get(CoinList(currency));
@@ -56,6 +51,14 @@ const CryptoContext = ({ children }) => {
     setTokens(data);
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (currency === "INR") setSymbol("₹");
+    else if (currency === "USD") setSymbol("$");
+
+    fetchTokens();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currency]);
 
   return (
     <Crypto.Provider
